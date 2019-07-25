@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="../rsc/bootstrap-4.3.1-dist/css/bootstrap.min.css"
+    />
+    <title>Document</title>
+    <style>
+      .cam {
+        display: flex;
+        justify-content: ;
+      }
+    </style>
+  </head>
+  <body
+    style="background: url(../rsc/img/441281.jpg) no-repeat center;background-attachment: fixed; background-size: cover;"
+  >
+    <div
+      style="background-color: #fff;min-height: 100vh; height: auto;"
+      class="container"
+    >
+      <h1 class="text-center">Form Data Siswa</h1>
+      <div class="row">
+        <div class="col-10 offset-1">
+          <form action="javascript:void(0);" method="POST" onsubmit="app.Add()">
+            <div class="form-group">
+              <label>Nama</label>
+              <input
+                type="text"
+                placeholder="Hammam..."
+                id="addName"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group">
+              <label>Kelas</label>
+              <input
+                type="text"
+                placeholder="X TJA 1"
+                id="addKelas"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group">
+              <label>No Absen</label>
+              <input
+                type="text"
+                placeholder="0"
+                id="addAbsen"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group">
+              <label>Kota Asal</label>
+              <input
+                type="text"
+                placeholder="Malang..."
+                id="addKota"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group">
+              <label>Waifu (jika punya)</label>
+              <input
+                type="text"
+                placeholder="Apapun..."
+                id="addWaifu"
+                class="form-control"
+              />
+            </div>
+            <input type="submit" value="Add" class="btn btn-primary" />
+          </form>
+
+          <div
+            style="background-color: rgba(128, 250, 128, 0.5); padding: 20px; box-sizing: border-box; padding: 20px; margin: 20px 0; border-radius: 10px"
+            id="formEdit"
+            role="aria-hidden"
+          >
+            <form action="javascript:void(0);" method="POST" id="saveEdit">
+              <div class="form-group">
+                <label>Nama</label>
+                <input
+                  type="text"
+                  id="editName"
+                  placeholder="Hammam..."
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label>Kelas</label>
+                <input
+                  type="text"
+                  id="editKelas"
+                  placeholder="X TJA 1"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label>Absen</label>
+                <input
+                  type="text"
+                  placeholder="0"
+                  id="editAbsen"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label>Kota Asal</label>
+                <input
+                  type="text"
+                  placeholder="Malang..."
+                  id="editKota"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label>Nama Waifu</label>
+                <input
+                  type="text"
+                  placeholder="Apapun..."
+                  id="editWaifu"
+                  class="form-control"
+                />
+              </div>
+              <input type="submit" value="Edit" class="btn btn-primary" />
+              <button
+                onclick="CloseInput()"
+                aria-label="Close"
+                class="btn btn-danger"
+              >
+                Kembali
+              </button>
+            </form>
+          </div>
+
+          <p id="hitung"></p>
+
+          <table class="table table-striped table-bordered">
+            <thead>
+              <tr class="text-center">
+                <th>Name</th>
+                <th>Kelas</th>
+                <th>Absen</th>
+                <th>Kota Asal</th>
+                <th>Waifu</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="name">
+              <td colspan="6"><h6 class="text-center">Tidak Ada Data</h6></td>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("formEdit").style.display = "none";
+      var app = new (function(data) {
+        this.getName = document.getElementById("name");
+        this.Name = []; //menampung result (array)
+        this.Kelas = [];
+        this.Absen = [];
+        this.Kota = [];
+        this.Waifu = [];
+
+        this.Hitung = function(data) {
+          var use = document.getElementById("hitung");
+          var name = "Siswa";
+
+          if (data) {
+            use.innerHTML = data + " " + name;
+          } else {
+            use.innerHTML = "Tidak ada " + name;
+          }
+        };
+
+        this.ShowData = function() {
+          var data1 = " ";
+          if (this.Name.length > 0) {
+            for (i = 0; i < this.Name.length; i++) {
+              data1 += "<tr>";
+              data1 += "<td>" + this.Name[i] + "</td>";
+              data1 += "<td>" + this.Kelas[i] + "</td>";
+              data1 += "<td>" + this.Absen[i] + "</td>";
+              data1 += "<td>" + this.Kota[i] + "</td>";
+              data1 += "<td>" + this.Waifu[i] + "</td>";
+              data1 +=
+                '<td style="display:flex; justify-content:space-around"> <button class="btn btn-info" onClick="app.Edit(' +
+                i +
+                ')"> Edit </button>';
+              data1 +=
+                '<button class="btn btn-danger" onClick="app.Delete(' +
+                i +
+                ')"> Delete </button></td>';
+              data1 += "</tr>";
+            }
+          } else {
+            data1 +=
+              '<td colspan="6"><h6 class="text-center">Tidak Ada Data</h6></td>';
+          }
+          this.Hitung(this.Name.length);
+          return (this.getName.innerHTML = data1);
+        };
+
+        this.Add = function(data) {
+          var getIdAddName = document.getElementById("addName");
+          var getIdAddKelas = document.getElementById("addKelas");
+          var getIdAddAbsen = document.getElementById("addAbsen");
+          var getIdAddKota = document.getElementById("addKota");
+          var getIdAddWaifu = document.getElementById("addWaifu");
+          var addN = getIdAddName.value;
+          var addKe = getIdAddKelas.value;
+          var addA = getIdAddAbsen.value;
+          var addKo = getIdAddKota.value;
+          var addW = getIdAddWaifu.value;
+
+          if (getIdAddName) {
+            this.Name.push(addN.trim());
+            this.Kelas.push(addKe.trim());
+            this.Absen.push(addA.trim());
+            this.Kota.push(addKo.trim());
+            this.Waifu.push(addW.trim());
+
+            getIdAddName.value = "";
+            getIdAddKelas.value = "";
+            getIdAddAbsen.value = "";
+            getIdAddKota.value = "";
+            getIdAddWaifu.value = "";
+            this.ShowData();
+          }
+        };
+
+        this.Edit = function(item) {
+          var editN = document.getElementById("editName");
+          var editKe = document.getElementById("editKelas");
+          var editA = document.getElementById("editAbsen");
+          var editKo = document.getElementById("editKota");
+          var editW = document.getElementById("editWaifu");
+          // menampilkan data
+          editN.value = this.Name[item];
+          editKe.value = this.Kelas[item];
+          editA.value = this.Absen[item];
+          editKo.value = this.Kota[item];
+          editW.value = this.Waifu[item];
+          document.getElementById("formEdit").style.display = "block";
+
+          yurod = this;
+          document.getElementById("saveEdit").onsubmit = function() {
+            var newName = editN.value;
+            var newKelas = editKe.value;
+            var newAbsen = editA.value;
+            var newKota = editKo.value;
+            var newWaifu = editW.value;
+            if (newName || newAbsen || newKelas || newKota || newWaifu) {
+              yurod.Name.splice(item, 1, newName.trim());
+              yurod.Kelas.splice(item, 1, newKelas.trim());
+              yurod.Absen.splice(item, 1, newAbsen.trim());
+              yurod.Kota.splice(item, 1, newKota.trim());
+              yurod.Waifu.splice(item, 1, newWaifu.trim());
+              yurod.ShowData();
+              CloseInput();
+            }
+          };
+        };
+
+        this.Delete = function(item) {
+          this.Name.splice(item, 1);
+          this.Kelas.splice(item, 1);
+          this.Absen.splice(item, 1);
+          this.Kota.splice(item, 1);
+          this.Waifu.splice(item, 1);
+
+          this.ShowData();
+        };
+      })();
+
+      function CloseInput() {
+        document.getElementById("formEdit").style.display = "none";
+      }
+    </script>
+  </body>
+</html>
